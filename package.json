@@ -1,0 +1,24 @@
+{
+  "name": "marefiya-backend-api-main",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "This a capstone project for final year. The purpose of this project is to build children orphanage adoption management system",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "Eyerusalem Yared",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.1",
+    "express-async-handler": "^1.2.0",
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.2.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
