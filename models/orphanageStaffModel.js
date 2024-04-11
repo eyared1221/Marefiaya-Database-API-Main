@@ -1,19 +1,21 @@
 import mongoose from 'mongoose';
+import bcrypt from "bcrypt";
+import validator from "validator";
 
 const orphanageStaffSchema = new mongoose.Schema({
 
     // Personal Information
-    name: {
+    idNumber: { 
         type: String,
-        required: [true, "please insert your name"]
+        required: [true, "Please insert your NIC number"],
     },
-    nicNumber: {
+    fullName: {
         type: String,
-        required: [true, "Please insert your NIC number"]
+        required: [true, "please insert your full name"],
     },
     gender: {
         type: String,
-        required: [true, "please insert your gender"]
+        required: [true, "please insert your gender"],
     },
     contact_number: {
         type: Number,
@@ -25,30 +27,20 @@ const orphanageStaffSchema = new mongoose.Schema({
             message: "Contact number must be whole number"
         }
     },
-    date_of_birth: {
-        type: Date, // '1990-01-01'
-        required: [true, "please select your date of birth"]
-    },
     address_location: {
         type: String,
-        required: [true, "please provide your address location"]
+        required: [true, "please provide your address location"],
     },
     email: {
         type: String,
         required: [true, "please insert your email"],
-        validate: {
-            validator: function (value) {
-                // Regular expression pattern for email validation
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailRegex.test(value);
-            },
-            message: "Please enter a valid email address"
-        }
+        validate: validator.isEmail
     },
     password: {
         type: String,
-        required: [true, "please insert your password"],
-        minLength: 8,
+        required: [true, "password is required"],
+        minlength: [6, "Password length should be greater than 6 character"],
+        select: true,
     },
     role: {
         type: String,
@@ -62,7 +54,7 @@ const orphanageStaffSchema = new mongoose.Schema({
             'Psychologist/Counselor',
             'Administrative Staff',
             'Maintenance/Support Staff'
-        ]
+        ],
     },
 
     // Affiliated organization 
@@ -78,24 +70,34 @@ const orphanageStaffSchema = new mongoose.Schema({
             'Professional Association',
             'Resource Sharing',
             'Collaboration and Support'
-        ]
+        ],
     },
 
-    // Documents
-    birthCertificate: { // import fs
+    // Document
+      kebeleDocument: {
         type: Buffer,
-        required: [true, "Please upload your birth certificate"]
-      },
-      kebeleID: {
-        type: Buffer,
-        required: [true, "Please upload your kebele ID"]
+        required: [true, "Please upload your kebele ID"],
+        //pdf: String,
+        //title: String
       }
-});
+},
+    {
+        timestamps: true,
+    }
+);
+
+// middelwares
+orphanageStaffSchema.pre("save", async function () {
+    if (!this.isModified) return;
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  });
+
+export default  mongoose.model('orphanageStaff', orphanageStaffSchema);
 
 
-const orphanageStaff = mongoose.model('orphanageStaff', orphanageStaffSchema);
 
-export default orphanageStaff;
+
 
 /*
 const fs = require('fs');

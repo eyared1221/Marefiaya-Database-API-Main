@@ -1,8 +1,8 @@
 import express from "express";
 import { 
-    createOrphanageStaff, 
-    getOrphanageStaff, 
-    updateOrphanageStaff, 
+    createOrphanageStaff,
+    updateOrphanageStaff,
+    // getOrphanageStaff,  
     deleteOrphanageStaff 
 }  from '../../controllers/orphanageManager/orphanageStaffController.js';
 
@@ -15,9 +15,8 @@ router
 
 router
     .route('/:id')
-    .get(getOrphanageStaff)
-    .patch(updateOrphanageStaff)
+   // .get(getOrphanageStaff)
+    .put(updateOrphanageStaff)
     .delete(deleteOrphanageStaff);
-
 
 export default router;
